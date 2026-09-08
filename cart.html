@@ -1,25 +1,488 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Cart — Swad Bakers</title>
-  <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #d97706;
+      --primary-dark: #b45309;
+      --secondary: #92400e;
+      --accent: #f59e0b;
+      --cream: #fffaf0;
+      --cream-dark: #fef3c7;
+      --white: #ffffff;
+      --brown: #4a2c1a;
+      --brown-light: #6b4428;
+      --text: #3f2a1d;
+      --muted: #8b735f;
+      --success: #15803d;
+      --danger: #dc2626;
+      --border: #ead8c5;
+      --shadow-sm: 0 4px 12px rgba(74,44,26,.08);
+      --shadow: 0 12px 35px rgba(74,44,26,.13);
+      --shadow-lg: 0 20px 55px rgba(74,44,26,.18);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(245,158,11,.12), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(217,119,6,.10), transparent 35%),
+        linear-gradient(135deg, #fffaf0, #fff7e6, #fffaf0);
+      padding: 20px;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(245,158,11,.08);
+      top: -100px;
+      left: -100px;
+      z-index: -1;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      background: rgba(146,64,14,.06);
+      bottom: -150px;
+      right: -120px;
+      z-index: -1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .site-header {
+      padding: 18px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,.96);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      z-index: 10;
+    }
+
+    .brand {
+      color: var(--brown);
+      text-decoration: none;
+      font-size: 27px;
+      font-weight: 900;
+      letter-spacing: -.5px;
+      transition: .3s ease;
+    }
+
+    .brand:hover {
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    main.container {
+      margin-top: 40px;
+      margin-bottom: 50px;
+    }
+
+    main h2 {
+      color: var(--brown);
+      font-size: 32px;
+      font-weight: 850;
+      margin-bottom: 25px;
+      position: relative;
+      padding-left: 16px;
+    }
+
+    main h2::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 5px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(to bottom, var(--accent), var(--primary-dark));
+    }
+
+    #cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 80px;
+    }
+
+    #cart-items > div {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: .3s ease;
+      animation: cartAppear .45s ease;
+    }
+
+    #cart-items > div:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    #cart-items img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #fff8ec;
+    }
+
+    #cart-items h3 {
+      color: var(--brown);
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    #cart-items p {
+      color: var(--brown-light);
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 5px;
+    }
+
+    #cart-items strong {
+      color: var(--primary-dark);
+      font-weight: 850;
+    }
+
+    #cart-items button {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 13px;
+      margin: 5px 4px 0 0;
+      background: var(--cream-dark);
+      color: var(--brown);
+      font-size: 13px;
+      font-weight: 750;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    #cart-items button:hover {
+      background: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    #cart-items button:last-child {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    #cart-items button:last-child:hover {
+      background: var(--danger);
+      color: var(--white);
+    }
+
+    .cart-summary {
+      margin-top: 25px;
+      padding: 25px;
+      background: rgba(255,255,255,.97);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      animation: summaryAppear .5s ease;
+    }
+
+    .cart-summary h3 {
+      color: var(--brown);
+      font-size: 21px;
+      margin-bottom: 15px;
+    }
+
+    .cart-summary p {
+      color: var(--brown-light);
+      font-size: 15px;
+      margin-bottom: 9px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .cart-summary strong {
+      color: var(--primary-dark);
+      font-weight: 850;
+    }
+
+    .cart-summary .total {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+      font-size: 21px;
+      font-weight: 900;
+      color: var(--brown);
+    }
+
+    .cart-summary .total strong {
+      font-size: 25px;
+      color: var(--primary-dark);
+    }
+
+    .actions {
+      margin-top: 22px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .btn {
+      min-height: 46px;
+      padding: 0 24px;
+      border-radius: 10px;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .3s ease;
+    }
+
+    .btn.primary {
+      color: var(--white);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      box-shadow: 0 7px 18px rgba(217,119,6,.25);
+    }
+
+    .btn.primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 11px 25px rgba(217,119,6,.35);
+    }
+
+    .btn.primary:active {
+      transform: translateY(0);
+    }
+
+    #btn-checkout:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #cart-items:empty::before {
+      content: "🛒";
+      display: block;
+      text-align: center;
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+
+    #cart-items:empty::after {
+      content: "Your cart is empty. Add some delicious treats from Swad Bakers!";
+      display: block;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--muted);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-sm);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    ::selection {
+      background: rgba(217,119,6,.25);
+      color: var(--brown);
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--cream);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d6b58e;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid rgba(245,158,11,.3);
+      outline-offset: 3px;
+    }
+
+    @keyframes cartAppear {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes summaryAppear {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 12px;
+      }
+
+      .site-header {
+        padding: 14px 16px;
+        border-radius: 12px;
+      }
+
+      .brand {
+        font-size: 22px;
+      }
+
+      main.container {
+        margin-top: 25px;
+      }
+
+      main h2 {
+        font-size: 27px;
+      }
+
+      main h2::before {
+        height: 28px;
+      }
+
+      #cart-items > div {
+        padding: 16px;
+        border-radius: 15px;
+      }
+
+      #cart-items img {
+        width: 70px;
+        height: 70px;
+      }
+
+      .cart-summary {
+        padding: 19px;
+        border-radius: 15px;
+      }
+
+      .actions {
+        justify-content: stretch;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 10px;
+      }
+
+      .site-header {
+        justify-content: center;
+      }
+
+      .brand {
+        font-size: 20px;
+      }
+
+      main h2 {
+        font-size: 24px;
+      }
+
+      #cart-items > div {
+        padding: 14px;
+      }
+
+      #cart-items img {
+        width: 60px;
+        height: 60px;
+      }
+
+      #cart-items h3 {
+        font-size: 16px;
+      }
+
+      #cart-items p {
+        font-size: 13px;
+      }
+
+      .cart-summary p {
+        font-size: 13px;
+      }
+
+      .cart-summary .total {
+        font-size: 18px;
+      }
+
+      .cart-summary .total strong {
+        font-size: 21px;
+      }
+    }
+  </style>
 </head>
+
 <body>
+
   <header class="site-header container">
     <a href="/" class="brand">Swad Bakers</a>
   </header>
 
   <main class="container">
     <h2>Your Cart</h2>
+
     <div id="cart-items"></div>
+
     <div id="cart-summary" class="cart-summary"></div>
+
     <div class="actions">
-      <button id="btn-checkout" class="btn primary">Proceed to Checkout</button>
+      <button id="btn-checkout" class="btn primary">
+        Proceed to Checkout
+      </button>
     </div>
   </main>
 
   <script type="module" src="js/app.js"></script>
+
 </body>
 </html>
