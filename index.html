@@ -1,102 +1,2258 @@
 <!doctype html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Swad Bakers — Freshly Baked. Delivered to Your City.</title>
-  <meta name="description" content="Swad Bakers — Local bakery & cake delivery demo." />
-  <link rel="stylesheet" href="styles.css">
-  <script type="module" src="https://unpkg.com/lucide@0.263.0/dist/lucide.min.js"></script>
+  <meta name="description" content="Swad Bakers — Local bakery & cake delivery demo.">
+
+  <!-- =========================================================
+       EMBEDDED CSS
+       ========================================================= -->
+
+  <style>
+    /* =========================================================
+       DESIGN TOKENS
+       ========================================================= */
+
+    :root {
+      --bg: #fffaf7;
+      --surface: #ffffff;
+      --muted: #6b6b75;
+      --text: #111216;
+
+      --accent: #d85a2a;
+      --accent-600: #b9441f;
+      --accent-200: #ffd7c2;
+
+      --success: #2ea274;
+      --danger: #e04b3b;
+
+      --glass: rgba(255, 255, 255, 0.6);
+
+      --font-sans:
+        Inter,
+        system-ui,
+        -apple-system,
+        "Segoe UI",
+        Roboto,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+      --base-size: 16px;
+
+      --space-xxs: 6px;
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 18px;
+      --space-lg: 28px;
+      --space-xl: 44px;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+
+      --shadow-1: 0 6px 20px rgba(17, 24, 39, 0.06);
+      --shadow-2: 0 14px 44px rgba(17, 24, 39, 0.10);
+
+      --fast: 150ms;
+      --mid: 260ms;
+      --ease: cubic-bezier(.2, .9, .2, 1);
+
+      --max-width: 1150px;
+    }
+
+
+    /* =========================================================
+       DARK THEME
+       ========================================================= */
+
+    body.dark {
+      --bg: #08090b;
+      --surface: #111315;
+      --muted: #aab0b6;
+      --text: #eef0f2;
+
+      --accent-200: rgba(216, 90, 42, 0.15);
+
+      --shadow-1: 0 8px 30px rgba(0, 0, 0, 0.6);
+      --shadow-2: 0 20px 60px rgba(0, 0, 0, 0.6);
+    }
+
+
+    /* =========================================================
+       RESET
+       ========================================================= */
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-sans);
+      font-size: var(--base-size);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.45;
+
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      overflow-x: hidden;
+    }
+
+    img,
+    video {
+      max-width: 100%;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      overflow-wrap: break-word;
+    }
+
+
+    /* =========================================================
+       CONTAINER
+       ========================================================= */
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+
+    /* =========================================================
+       UTILITIES
+       ========================================================= */
+
+    .row {
+      display: flex;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .col {
+      flex: 1 1 0;
+    }
+
+    .h-100 {
+      height: 100%;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .small {
+      font-size: 0.92rem;
+    }
+
+    .kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .mobile-only {
+      display: none;
+    }
+
+
+    /* =========================================================
+       ACCESSIBILITY
+       ========================================================= */
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    :focus {
+      outline: none;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 3px solid rgba(216, 90, 42, 0.25);
+      outline-offset: 3px;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+      transition:
+        background var(--mid) var(--ease),
+        box-shadow var(--mid) var(--ease);
+    }
+
+    body.dark .site-header {
+      background: rgba(17, 19, 21, 0.94);
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .site-header:hover {
+      box-shadow: var(--shadow-1);
+    }
+
+    .header-inner {
+      min-height: 72px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 1rem;
+      padding-top: 0.7rem;
+      padding-bottom: 0.7rem;
+    }
+
+
+    /* =========================================================
+       BRAND
+       ========================================================= */
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+
+      color: var(--accent);
+      font-weight: 900;
+      font-size: 1.12rem;
+
+      white-space: nowrap;
+    }
+
+    .brand .logo {
+      width: 44px;
+      height: 44px;
+
+      display: inline-block;
+
+      color: var(--accent);
+
+      transition:
+        transform var(--mid) var(--ease),
+        filter var(--mid) var(--ease);
+    }
+
+    .brand:hover .logo {
+      transform: rotate(-5deg) scale(1.05);
+      filter: drop-shadow(0 6px 10px rgba(216, 90, 42, 0.18));
+    }
+
+
+    /* =========================================================
+       NAVIGATION
+       ========================================================= */
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+
+      gap: 0.35rem;
+    }
+
+    .nav-link,
+    .nav-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 0.4rem;
+
+      min-height: 40px;
+
+      padding: 0.5rem 0.7rem;
+
+      border: 0;
+      border-radius: 10px;
+
+      background: transparent;
+      color: var(--text);
+
+      font-weight: 700;
+
+      transition:
+        background var(--fast) var(--ease),
+        color var(--fast) var(--ease),
+        transform var(--fast) var(--ease),
+        box-shadow var(--fast) var(--ease);
+    }
+
+    .nav-link:hover,
+    .nav-icon:hover {
+      background: var(--accent-200);
+      color: var(--accent-600);
+
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-1);
+    }
+
+    .nav-icon svg,
+    .nav-link svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .nav .badge {
+      min-width: 21px;
+      height: 21px;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 2px 6px;
+
+      background: var(--danger);
+      color: #fff;
+
+      border-radius: 999px;
+
+      font-weight: 800;
+      font-size: 0.72rem;
+    }
+
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
+    .hero {
+      position: relative;
+
+      min-height: 520px;
+      height: min(72vh, 760px);
+
+      display: flex;
+      align-items: center;
+
+      margin: 1.25rem auto;
+
+      max-width: calc(var(--max-width) - 2rem);
+
+      border-radius: var(--radius-lg);
+
+      overflow: hidden;
+
+      isolation: isolate;
+
+      box-shadow: var(--shadow-2);
+    }
+
+    .hero-video {
+      position: absolute;
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      display: block;
+
+      z-index: -3;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(0, 0, 0, 0.72) 0%,
+          rgba(0, 0, 0, 0.48) 45%,
+          rgba(0, 0, 0, 0.20) 100%
+        );
+
+      z-index: -2;
+
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+
+      width: 100%;
+      max-width: 720px;
+
+      color: #fff;
+
+      padding: 2.2rem 1.5rem;
+
+      animation: heroEnter 700ms var(--ease) both;
+    }
+
+    @keyframes heroEnter {
+      from {
+        opacity: 0;
+        transform: translateY(25px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero h1 {
+      margin: 0 0 0.8rem;
+
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.03;
+
+      font-weight: 900;
+      letter-spacing: -0.035em;
+
+      text-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    .hero p {
+      max-width: 55ch;
+
+      margin: 0 0 1.4rem;
+
+      color: rgba(255, 255, 255, 0.94);
+
+      font-size: clamp(0.98rem, 2vw, 1.15rem);
+    }
+
+    .hero-ctas {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+
+      gap: 0.7rem;
+    }
+
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      gap: 0.5rem;
+
+      min-height: 42px;
+
+      padding: 0.65rem 1rem;
+
+      border-radius: 12px;
+      border: 0;
+
+      font-weight: 800;
+
+      transition:
+        transform var(--fast) var(--ease),
+        box-shadow var(--fast) var(--ease),
+        background var(--fast) var(--ease);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .btn.primary {
+      background: linear-gradient(
+        180deg,
+        var(--accent),
+        var(--accent-600)
+      );
+
+      color: #fff;
+
+      box-shadow:
+        0 12px 40px rgba(216, 90, 42, 0.18);
+    }
+
+    .btn.primary:hover {
+      box-shadow: var(--shadow-2);
+    }
+
+    .btn.outline {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+
+      border: 1px solid rgba(255, 255, 255, 0.5);
+
+      backdrop-filter: blur(6px);
+    }
+
+    .btn.outline:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: #fff;
+
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .btn.small {
+      min-height: 36px;
+
+      padding: 0.4rem 0.65rem;
+
+      font-size: 0.9rem;
+      border-radius: 9px;
+    }
+
+
+    /* =========================================================
+       CITY SELECT
+       ========================================================= */
+
+    .city-select {
+      min-width: 150px;
+
+      padding: 0.62rem 0.75rem;
+
+      color: #fff;
+
+      background: rgba(255, 255, 255, 0.10);
+
+      border: 1px solid rgba(255, 255, 255, 0.28);
+
+      border-radius: 10px;
+
+      outline: none;
+
+      backdrop-filter: blur(8px);
+    }
+
+    .city-select option {
+      color: #111;
+      background: #fff;
+    }
+
+
+    /* =========================================================
+       SECTION HEADINGS
+       ========================================================= */
+
+    main section:not(.hero) {
+      margin-top: 3rem;
+    }
+
+    h2 {
+      margin: 0 0 1rem;
+
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+
+      line-height: 1.15;
+      font-weight: 900;
+    }
+
+
+    /* =========================================================
+       CATEGORIES
+       ========================================================= */
+
+    .categories-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(auto-fit, minmax(160px, 1fr));
+
+      gap: 1rem;
+
+      margin-top: var(--space-sm);
+    }
+
+    .category-card {
+      background: var(--surface);
+
+      padding: 1rem;
+
+      border-radius: var(--radius-md);
+
+      box-shadow: var(--shadow-1);
+
+      border: 1px solid rgba(0, 0, 0, 0.04);
+
+      transition:
+        transform var(--fast) var(--ease),
+        box-shadow var(--fast) var(--ease);
+    }
+
+    body.dark .category-card {
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .category-card:hover {
+      transform: translateY(-6px);
+
+      box-shadow: var(--shadow-2);
+    }
+
+    .category-card h3 {
+      margin: 0 0 0.35rem;
+    }
+
+    .category-card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+
+    /* =========================================================
+       PRODUCTS HEADER
+       ========================================================= */
+
+    .products-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 1rem;
+
+      margin-bottom: 1rem;
+
+      flex-wrap: wrap;
+    }
+
+    .products-header h2 {
+      margin-bottom: 0;
+    }
+
+    .search-filter {
+      display: flex;
+      align-items: center;
+
+      gap: 0.6rem;
+
+      flex-wrap: wrap;
+
+      flex: 1;
+      justify-content: flex-end;
+    }
+
+
+    /* =========================================================
+       INPUTS / SELECTS
+       ========================================================= */
+
+    input,
+    textarea,
+    select,
+    .input {
+      width: 100%;
+
+      min-height: 42px;
+
+      padding: 0.62rem 0.75rem;
+
+      border: 1px solid #e6e6e6;
+
+      border-radius: 10px;
+
+      background: var(--surface);
+      color: var(--text);
+
+      font-size: 1rem;
+
+      transition:
+        border-color var(--fast) var(--ease),
+        box-shadow var(--fast) var(--ease);
+    }
+
+    .search-filter input {
+      width: min(240px, 100%);
+    }
+
+    .search-filter select {
+      width: auto;
+      min-width: 150px;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--muted);
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+
+      box-shadow:
+        0 0 0 4px rgba(216, 90, 42, 0.10);
+    }
+
+
+    /* =========================================================
+       PRODUCTS GRID
+       ========================================================= */
+
+    .products-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+
+      gap: 1rem;
+
+      margin-top: 0.8rem;
+    }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+
+      min-height: 330px;
+
+      overflow: hidden;
+
+      background: var(--surface);
+
+      border-radius: var(--radius-md);
+
+      border: 1px solid rgba(0, 0, 0, 0.04);
+
+      box-shadow: var(--shadow-1);
+
+      transition:
+        transform var(--mid) var(--ease),
+        box-shadow var(--mid) var(--ease);
+    }
+
+    body.dark .product-card {
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .product-card:hover {
+      transform: translateY(-7px);
+
+      box-shadow: var(--shadow-2);
+    }
+
+
+    /* =========================================================
+       PRODUCT MEDIA
+       Supports both .media and .product-media
+       ========================================================= */
+
+    .media,
+    .product-media {
+      position: relative;
+
+      height: 190px;
+
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.03),
+          rgba(0, 0, 0, 0.01)
+        );
+    }
+
+    .media img,
+    .product-media img {
+      width: 100%;
+      height: 100%;
+
+      display: block;
+
+      object-fit: cover;
+
+      transition: transform 500ms var(--ease);
+    }
+
+    .product-card:hover .media img,
+    .product-card:hover .product-media img {
+      transform: scale(1.06);
+    }
+
+
+    /* =========================================================
+       PRODUCT BADGES
+       ========================================================= */
+
+    .badges,
+    .stickers {
+      position: absolute;
+
+      top: 12px;
+      left: 12px;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 8px;
+
+      z-index: 4;
+    }
+
+    .sticker,
+    .badge-item {
+      display: inline-flex;
+
+      width: fit-content;
+
+      padding: 6px 10px;
+
+      border-radius: 999px;
+
+      background: var(--accent-200);
+
+      color: var(--accent-600);
+
+      font-size: 0.78rem;
+
+      font-weight: 800;
+
+      box-shadow:
+        0 8px 20px rgba(216, 90, 42, 0.08);
+    }
+
+
+    /* =========================================================
+       PRODUCT VIDEO BUTTON
+       ========================================================= */
+
+    .video-play {
+      position: absolute;
+
+      right: 12px;
+      bottom: 12px;
+
+      width: 42px;
+      height: 42px;
+
+      border: 0;
+      border-radius: 50%;
+
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+
+      display: grid;
+      place-items: center;
+
+      backdrop-filter: blur(5px);
+    }
+
+
+    /* =========================================================
+       PRODUCT BODY
+       ========================================================= */
+
+    .body,
+    .product-body {
+      display: flex;
+      flex-direction: column;
+
+      flex: 1;
+
+      gap: 0.5rem;
+
+      padding: 0.95rem;
+    }
+
+    .title,
+    .product-title {
+      margin: 0;
+
+      font-weight: 850;
+
+      line-height: 1.2;
+    }
+
+    .meta,
+    .product-meta,
+    .product-desc {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 0.94rem;
+    }
+
+    .bottom,
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 0.6rem;
+
+      margin-top: auto;
+    }
+
+    .price {
+      color: var(--accent);
+
+      font-size: 1.05rem;
+
+      font-weight: 900;
+    }
+
+    .discount {
+      color: var(--success);
+
+      font-size: 0.8rem;
+
+      font-weight: 800;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+
+      gap: 0.5rem;
+    }
+
+    .btn.wishlist {
+      background: transparent;
+
+      color: var(--text);
+
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    body.dark .btn.wishlist {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn.add,
+    .btn.add-cart {
+      background: var(--accent);
+      color: #fff;
+    }
+
+
+    /* =========================================================
+       ABOUT
+       ========================================================= */
+
+    .about {
+      padding-bottom: 2rem;
+    }
+
+    .about p {
+      max-width: 750px;
+
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 1.02rem;
+    }
+
+
+    /* =========================================================
+       FEATURES
+       ========================================================= */
+
+    .features {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 1rem;
+
+      margin: var(--space-lg) 0;
+    }
+
+    .feature {
+      background: var(--surface);
+
+      padding: var(--space-md);
+
+      border-radius: var(--radius-md);
+
+      box-shadow: var(--shadow-1);
+
+      text-align: center;
+
+      transition:
+        transform var(--fast) var(--ease),
+        box-shadow var(--fast) var(--ease);
+    }
+
+    .feature:hover {
+      transform: translateY(-6px);
+
+      box-shadow: var(--shadow-2);
+    }
+
+
+    /* =========================================================
+       PRODUCT DETAIL
+       ========================================================= */
+
+    .product-detail {
+      display: grid;
+
+      grid-template-columns: 1fr 1fr;
+
+      gap: 1.2rem;
+
+      align-items: start;
+
+      margin: 1rem 0;
+    }
+
+    .product-detail img {
+      width: 100%;
+
+      border-radius: 12px;
+
+      box-shadow: var(--shadow-2);
+    }
+
+    .qty {
+      width: 72px;
+
+      padding: 0.45rem;
+
+      border-radius: 10px;
+
+      border: 1px solid #eee;
+    }
+
+
+    /* =========================================================
+       MODALS
+       ========================================================= */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      padding: 1rem;
+
+      background: rgba(0, 0, 0, 0.55);
+
+      z-index: 9999;
+    }
+
+    .modal[aria-hidden="false"],
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-dialog {
+      position: relative;
+
+      width: 100%;
+      max-width: 920px;
+
+      padding: 1.2rem;
+
+      background: var(--surface);
+
+      border-radius: 14px;
+
+      box-shadow: var(--shadow-2);
+
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+
+      top: 12px;
+      right: 12px;
+
+      background: transparent;
+
+      border: 0;
+
+      color: var(--text);
+
+      font-size: 1.2rem;
+    }
+
+
+    /* =========================================================
+       CART
+       ========================================================= */
+
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+
+      gap: 0.6rem;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 0.8rem;
+
+      padding: 0.8rem;
+
+      border-radius: 10px;
+
+      background: var(--surface);
+
+      box-shadow: var(--shadow-1);
+    }
+
+    .cart-item-left {
+      display: flex;
+      align-items: center;
+
+      gap: 0.8rem;
+    }
+
+    .cart-item img {
+      width: 74px;
+      height: 56px;
+
+      object-fit: cover;
+
+      border-radius: 10px;
+    }
+
+    .cart-summary {
+      margin-top: 0.9rem;
+
+      padding: 1rem;
+
+      border-radius: 10px;
+
+      background: var(--surface);
+
+      box-shadow: var(--shadow-1);
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+
+      gap: 0.6rem;
+
+      margin-bottom: 0.5rem;
+    }
+
+
+    /* =========================================================
+       CHECKOUT
+       ========================================================= */
+
+    .checkout-steps {
+      display: flex;
+      align-items: center;
+
+      gap: 0.6rem;
+
+      flex-wrap: wrap;
+    }
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      gap: 0.4rem;
+
+      padding: 0.6rem 0.9rem;
+
+      border-radius: 10px;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.02),
+          rgba(0, 0, 0, 0.01)
+        );
+    }
+
+
+    /* =========================================================
+       AUTH FORM
+       ========================================================= */
+
+    .form {
+      width: 100%;
+      max-width: 520px;
+
+      margin: 1rem auto;
+
+      padding: 1.2rem;
+
+      background: var(--surface);
+
+      border-radius: 12px;
+
+      box-shadow: var(--shadow-2);
+    }
+
+    .form label {
+      display: block;
+
+      margin-bottom: 0.35rem;
+
+      color: var(--muted);
+
+      font-weight: 600;
+    }
+
+    .form-actions {
+      display: flex;
+
+      gap: 0.6rem;
+
+      margin-top: 0.6rem;
+
+      flex-wrap: wrap;
+    }
+
+
+    /* =========================================================
+       ORDERS
+       ========================================================= */
+
+    .order-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 1rem;
+
+      padding: 0.9rem;
+
+      margin-bottom: 0.6rem;
+
+      border-radius: 10px;
+
+      background: var(--surface);
+
+      box-shadow: var(--shadow-1);
+    }
+
+    .progress {
+      height: 10px;
+
+      background: #f0f1f2;
+
+      border-radius: 999px;
+
+      overflow: hidden;
+    }
+
+    .progress > i {
+      display: block;
+
+      height: 100%;
+
+      width: 0%;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--accent),
+          var(--accent-200)
+        );
+
+      transition:
+        width 700ms var(--ease);
+    }
+
+
+    /* =========================================================
+       ADMIN
+       ========================================================= */
+
+    .admin-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, 1fr);
+
+      gap: 1rem;
+
+      margin-bottom: 1rem;
+    }
+
+    .metric {
+      padding: 1rem;
+
+      background: var(--surface);
+
+      border-radius: 10px;
+
+      box-shadow: var(--shadow-1);
+    }
+
+    .admin-table {
+      width: 100%;
+
+      border-collapse: collapse;
+
+      background: var(--surface);
+
+      border-radius: 8px;
+
+      overflow: hidden;
+
+      box-shadow: var(--shadow-1);
+    }
+
+    .admin-table th,
+    .admin-table td {
+      padding: 0.6rem 0.8rem;
+
+      border-bottom:
+        1px solid rgba(0, 0, 0, 0.06);
+
+      text-align: left;
+    }
+
+
+    /* =========================================================
+       GRID UTILITIES
+       ========================================================= */
+
+    .grid-2 {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 1rem;
+    }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .site-footer {
+      margin-top: 3rem;
+
+      padding: 1.5rem 0;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      border-top:
+        1px solid rgba(0, 0, 0, 0.06);
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @media (max-width: 1100px) {
+      .admin-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+
+    /* =========================================================
+       TABLET / SMALL LAPTOP
+       ========================================================= */
+
+    @media (max-width: 880px) {
+
+      .header-inner {
+        min-height: 64px;
+      }
+
+      .brand span {
+        display: none;
+      }
+
+      .nav {
+        gap: 0.15rem;
+      }
+
+      .nav .nav-link:nth-of-type(1),
+      .nav .nav-link:nth-of-type(2) {
+        display: none;
+      }
+
+      .mobile-only {
+        display: inline-flex;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: 470px;
+
+        height: 62vh;
+
+        margin-left: 0.75rem;
+        margin-right: 0.75rem;
+
+        border-radius: 15px;
+      }
+
+      .hero-content {
+        padding: 1.5rem;
+      }
+
+      .product-detail {
+        grid-template-columns: 1fr;
+      }
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @media (max-width: 720px) {
+
+      :root {
+        --base-size: 15px;
+      }
+
+      .container {
+        padding-left: 0.8rem;
+        padding-right: 0.8rem;
+      }
+
+      .header-inner {
+        gap: 0.5rem;
+      }
+
+      .brand .logo {
+        width: 38px;
+        height: 38px;
+      }
+
+      .nav {
+        width: auto;
+
+        overflow-x: auto;
+
+        scrollbar-width: none;
+      }
+
+      .nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .nav-link,
+      .nav-icon {
+        min-width: 40px;
+
+        padding: 0.45rem;
+
+        flex-shrink: 0;
+      }
+
+      #btn-location span {
+        display: none;
+      }
+
+      .hero {
+        min-height: 480px;
+
+        height: 68vh;
+
+        margin-top: 0.7rem;
+
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+
+        border-radius: 14px;
+      }
+
+      .hero-overlay {
+        background:
+          linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.20),
+            rgba(0, 0, 0, 0.78)
+          );
+      }
+
+      .hero-content {
+        align-self: flex-end;
+
+        padding: 1.2rem;
+
+        margin-top: auto;
+        padding-bottom: 2rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(1.9rem, 9vw, 2.7rem);
+
+        letter-spacing: -0.025em;
+      }
+
+      .hero p {
+        font-size: 0.95rem;
+      }
+
+      .hero-ctas {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        width: 100%;
+      }
+
+      .hero-ctas .btn,
+      .hero-ctas .city-select {
+        width: 100%;
+      }
+
+      .city-select {
+        grid-column: 1 / -1;
+      }
+
+      main section:not(.hero) {
+        margin-top: 2.2rem;
+      }
+
+      .categories-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
+        gap: 0.7rem;
+      }
+
+      .category-card {
+        padding: 0.85rem;
+      }
+
+      .products-header {
+        align-items: stretch;
+      }
+
+      .products-header h2 {
+        width: 100%;
+      }
+
+      .search-filter {
+        display: grid;
+
+        grid-template-columns: 1fr;
+
+        width: 100%;
+
+        justify-content: stretch;
+      }
+
+      .search-filter input,
+      .search-filter select {
+        width: 100%;
+      }
+
+      .products-grid {
+        grid-template-columns:
+          repeat(2, minmax(0, 1fr));
+
+        gap: 0.7rem;
+      }
+
+      .product-card {
+        min-width: 0;
+        min-height: 300px;
+      }
+
+      .media,
+      .product-media {
+        height: 150px;
+      }
+
+      .body,
+      .product-body {
+        padding: 0.75rem;
+      }
+
+      .title,
+      .product-title {
+        font-size: 0.96rem;
+      }
+
+      .meta,
+      .product-meta,
+      .product-desc {
+        font-size: 0.84rem;
+      }
+
+      .bottom,
+      .product-footer {
+        align-items: flex-end;
+      }
+
+      .actions {
+        gap: 0.25rem;
+      }
+
+      .btn.small {
+        min-height: 34px;
+
+        padding: 0.35rem 0.5rem;
+      }
+
+      .price {
+        font-size: 0.95rem;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .order-card {
+        align-items: flex-start;
+
+        flex-direction: column;
+      }
+
+      .cart-item {
+        align-items: flex-start;
+      }
+
+      .cart-item-left {
+        align-items: flex-start;
+      }
+
+      .admin-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-table {
+        display: block;
+
+        overflow-x: auto;
+      }
+    }
+
+
+    /* =========================================================
+       VERY SMALL PHONES
+       ========================================================= */
+
+    @media (max-width: 420px) {
+
+      .site-header {
+        position: sticky;
+      }
+
+      .header-inner {
+        min-height: 58px;
+
+        padding-top: 0.45rem;
+        padding-bottom: 0.45rem;
+      }
+
+      .brand .logo {
+        width: 34px;
+        height: 34px;
+      }
+
+      .nav {
+        gap: 0;
+      }
+
+      .nav-link,
+      .nav-icon {
+        min-width: 36px;
+        min-height: 36px;
+      }
+
+      .hero {
+        min-height: 500px;
+
+        height: 72vh;
+      }
+
+      .hero-content {
+        padding: 1rem;
+
+        padding-bottom: 1.5rem;
+      }
+
+      .hero h1 {
+        font-size: 1.8rem;
+      }
+
+      .hero-ctas {
+        grid-template-columns: 1fr;
+      }
+
+      .city-select {
+        grid-column: auto;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .media,
+      .product-media {
+        height: 200px;
+      }
+
+      .categories-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+
+    /* =========================================================
+       REDUCED MOTION
+       ========================================================= */
+
+    @media (prefers-reduced-motion: reduce) {
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+
+    /* =========================================================
+       PRINT
+       ========================================================= */
+
+    @media print {
+
+      .site-header,
+      .site-footer,
+      .btn,
+      .nav,
+      .modal {
+        display: none !important;
+      }
+
+      body {
+        background: #fff;
+        color: #000;
+      }
+    }
+  </style>
+
+  <!-- Lucide icons -->
+
+  <script
+    type="module"
+    src="https://unpkg.com/lucide@0.263.0/dist/lucide.min.js">
+  </script>
+
 </head>
+
 <body>
+
+  <!-- =======================================================
+       HEADER
+       ======================================================= -->
+
   <header class="site-header">
     <div class="container header-inner">
-      <a href="/" class="brand">
-        <svg class="logo" viewBox="0 0 64 64" aria-hidden><g fill="none" stroke="currentColor" stroke-width="2"><path d="M32 6 C20 6 10 16 10 28 c0 12 9 22 22 30 13-8 22-18 22-30C54 16 44 6 32 6z"/><path d="M20 34c4 6 12 10 12 10s8-4 12-10"/></g></svg>
-        <span>Swad Bakers</span>
-      </a>
 
-      <nav class="nav">
-        <button id="btn-location" class="nav-icon" title="Select city"><i data-feather="map-pin"></i><span id="city-name">Your City</span></button>
-        <a href="index.html" class="nav-link">Home</a>
-        <a href="orders.html" class="nav-link">Orders</a>
-        <a href="product.html" class="nav-link">product</a>
-        <button id="btn-login" class="nav-link">Login</button>
-        <button id="btn-cart" class="nav-icon" aria-label="Cart"><i data-feather="shopping-cart"></i><span id="cart-count" class="badge">0</span></button>
-        <button id="theme-toggle" class="nav-icon" title="Toggle theme"><i data-feather="moon"></i></button>
-      </nav>
-    </div>
+```
+  <a href="/" class="brand" aria-label="Swad Bakers Home">
+
+    <svg
+      class="logo"
+      viewBox="0 0 64 64"
+      aria-hidden="true">
+
+      <g
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2">
+
+        <path
+          d="M32 6 C20 6 10 16 10 28 c0 12 9 22 22 30 13-8 22-18 22-30C54 16 44 6 32 6z"/>
+
+        <path
+          d="M20 34c4 6 12 10 12 10s8-4 12-10"/>
+      </g>
+    </svg>
+
+    <span>Swad Bakers</span>
+  </a>
+
+
+  <nav class="nav" aria-label="Main navigation">
+
+    <button
+      id="btn-location"
+      class="nav-icon"
+      type="button"
+      title="Select city">
+
+      <i data-feather="map-pin"></i>
+
+      <span id="city-name">
+        Your City
+      </span>
+    </button>
+
+
+    <a
+      href="index.html"
+      class="nav-link">
+      Home
+    </a>
+
+
+    <a
+      href="orders.html"
+      class="nav-link">
+      Orders
+    </a>
+
+
+    <a
+      href="product.html"
+      class="nav-link">
+      Product
+    </a>
+
+
+    <button
+      id="btn-login"
+      class="nav-link"
+      type="button">
+      Login
+    </button>
+
+
+    <button
+      id="btn-cart"
+      class="nav-icon"
+      type="button"
+      aria-label="Shopping cart">
+
+      <i data-feather="shopping-cart"></i>
+
+      <span
+        id="cart-count"
+        class="badge">
+        0
+      </span>
+    </button>
+
+
+    <button
+      id="theme-toggle"
+      class="nav-icon"
+      type="button"
+      title="Toggle theme"
+      aria-label="Toggle dark mode">
+
+      <i data-feather="moon"></i>
+    </button>
+
+  </nav>
+
+</div>
+```
+
   </header>
 
+  <!-- =======================================================
+       MAIN
+       ======================================================= -->
+
   <main>
-    <section class="hero">
-      <video class="hero-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop" aria-hidden>
-        <source src="donute.mp4"type="video/mp4">
-      </video>
-      <div class="hero-overlay"></div>
-      <div class="hero-content container">
-        <h1>Freshly Baked. Delivered to Your City.</h1>
-        <p>Delicious bakery items, cakes, breads & beverages — fast delivery within your city.</p>
-        <div class="hero-ctas">
-          <button id="order-now" class="btn primary">Order Now</button>
-          <button id="explore-menu" class="btn outline">Explore Menu</button>
-          <select id="city-select" class="city-select" aria-label="Select your city"></select>
-        </div>
-      </div>
-    </section>
 
-    <section class="container categories" id="categories-section">
-      <h2>Categories</h2>
-      <div class="categories-grid" id="categories-grid"></div>
-    </section>
+```
+<!-- HERO -->
 
-    <section class="container products" id="products-section">
-      <div class="products-header">
-        <h2>Menu</h2>
-        <div class="search-filter">
-          <input id="search" placeholder="Search products" />
-          <select id="filter-category"><option value="">All</option></select>
-          <select id="sort"><option value="">Sort</option><option value="price_asc">Price low → high</option><option value="price_desc">Price high → low</option><option value="rating_desc">Rating</option><option value="new">New arrivals</option></select>
-        </div>
-      </div>
-      <div id="products-grid" class="products-grid" aria-live="polite"></div>
-    </section>
+<section class="hero">
 
-    <section class="container about">
-      <h2>About Swad Bakers</h2>
-      <p>Swad Bakers brings fresh baked goods to your doorstep. City-focused deliveries with transparent delivery charges and estimated times.</p>
-    </section>
+  <video
+    class="hero-video"
+    autoplay
+    muted
+    loop
+    playsinline
+    poster="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop"
+    aria-hidden="true">
+
+    <source
+      src="donute.mp4"
+      type="video/mp4">
+
+  </video>
+
+
+  <div class="hero-overlay"></div>
+
+
+  <div class="hero-content container">
+
+    <h1>
+      Freshly Baked.
+      Delivered to Your City.
+    </h1>
+
+    <p>
+      Delicious bakery items, cakes, breads & beverages —
+      fast delivery within your city.
+    </p>
+
+
+    <div class="hero-ctas">
+
+      <button
+        id="order-now"
+        class="btn primary"
+        type="button">
+        Order Now
+      </button>
+
+
+      <button
+        id="explore-menu"
+        class="btn outline"
+        type="button">
+        Explore Menu
+      </button>
+
+
+      <select
+        id="city-select"
+        class="city-select"
+        aria-label="Select your city">
+      </select>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- CATEGORIES -->
+
+<section
+  class="container categories"
+  id="categories-section">
+
+  <h2>
+    Categories
+  </h2>
+
+  <div
+    class="categories-grid"
+    id="categories-grid">
+  </div>
+
+</section>
+
+
+<!-- PRODUCTS -->
+
+<section
+  class="container products"
+  id="products-section">
+
+  <div class="products-header">
+
+    <h2>
+      Menu
+    </h2>
+
+
+    <div class="search-filter">
+
+      <input
+        id="search"
+        type="search"
+        placeholder="Search products"
+        aria-label="Search products">
+
+
+      <select
+        id="filter-category"
+        aria-label="Filter by category">
+
+        <option value="">
+          All
+        </option>
+
+      </select>
+
+
+      <select
+        id="sort"
+        aria-label="Sort products">
+
+        <option value="">
+          Sort
+        </option>
+
+        <option value="price_asc">
+          Price low → high
+        </option>
+
+        <option value="price_desc">
+          Price high → low
+        </option>
+
+        <option value="rating_desc">
+          Rating
+        </option>
+
+        <option value="new">
+          New arrivals
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="products-grid"
+    class="products-grid"
+    aria-live="polite">
+  </div>
+
+</section>
+
+
+<!-- ABOUT -->
+
+<section class="container about">
+
+  <h2>
+    About Swad Bakers
+  </h2>
+
+  <p>
+    Swad Bakers brings fresh baked goods to your doorstep.
+    City-focused deliveries with transparent delivery
+    charges and estimated times.
+  </p>
+
+</section>
+```
+
   </main>
 
+  <!-- =======================================================
+       FOOTER
+       ======================================================= -->
+
   <footer class="site-footer">
-    <div class="container">
-      <p>&copy; <span id="year"></span> Swad Bakers — Local bakery & delivery</p>
-    </div>
+
+```
+<div class="container">
+
+  <p>
+    &copy;
+    <span id="year"></span>
+    Swad Bakers — Local bakery & delivery
+  </p>
+
+</div>
+```
+
   </footer>
 
+  <!-- =======================================================
+       PRODUCT CARD TEMPLATE
+       ======================================================= -->
+
   <template id="product-card">
-    <article class="product-card">
-      <div class="media">
-        <img alt="">
-        <div class="badges"></div>
-        <button class="video-play" hidden>▶</button>
+
+```
+<article class="product-card">
+
+  <div class="media">
+
+    <img alt="">
+
+    <div class="badges"></div>
+
+    <button
+      class="video-play"
+      type="button"
+      hidden>
+      ▶
+    </button>
+
+  </div>
+
+
+  <div class="body">
+
+    <h3 class="title"></h3>
+
+    <p class="meta"></p>
+
+
+    <div class="bottom">
+
+      <div class="price">
+
+        ₹
+        <span class="price-val"></span>
+
+        <small class="discount"></small>
+
       </div>
-      <div class="body">
-        <h3 class="title"></h3>
-        <p class="meta"></p>
-        <div class="bottom">
-          <div class="price">₹ <span class="price-val"></span> <small class="discount"></small></div>
-          <div class="actions">
-            <button class="btn small wishlist" title="Add to wishlist"><i data-feather="heart"></i></button>
-            <button class="btn small add-cart">Add</button>
-          </div>
-        </div>
+
+
+      <div class="actions">
+
+        <button
+          class="btn small wishlist"
+          type="button"
+          title="Add to wishlist"
+          aria-label="Add to wishlist">
+
+          <i data-feather="heart"></i>
+
+        </button>
+
+
+        <button
+          class="btn small add-cart"
+          type="button">
+
+          Add
+
+        </button>
+
       </div>
-    </article>
+
+    </div>
+
+  </div>
+
+</article>
+```
+
   </template>
 
-  <script type="module" src="app.js"></script>
-  <script type="module" src="auth.js"></script>
-  <script>document.addEventListener('DOMContentLoaded', ()=>{ if(window.lucide) lucide.replace(); })</script>
+  <!-- =======================================================
+       JAVASCRIPT
+       ======================================================= -->
+
+  <script
+    type="module"
+    src="app.js">
+  </script>
+
+  <script
+    type="module"
+    src="auth.js">
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+      if (window.lucide) {
+        lucide.replace();
+      }
+
+      const year = document.getElementById("year");
+
+      if (year) {
+        year.textContent = new Date().getFullYear();
+      }
+
+    });
+  </script>
+
 </body>
 </html>
