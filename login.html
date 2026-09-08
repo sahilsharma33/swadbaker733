@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login — Swad Bakers</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="container auth-page">
+    <h2>Login / Register</h2>
+    <form id="auth-form">
+      <label>Email <input id="email" type="email" required></label>
+      <label>Password <input id="password" type="password" required></label>
+      <div class="auth-actions">
+        <button class="btn primary" id="btn-login">Login</button>
+        <button type="button" class="btn outline" id="btn-toggle">Create account</button>
+      </div>
+      <div id="auth-msg" class="muted"></div>
+    </form>
+  </main>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Swad Bakers — Freshly Baked. Delivered to Your City.</title>
+  <meta name="description" content="Swad Bakers — Local bakery & cake delivery demo." />
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="module" src="https://unpkg.com/lucide@0.263.0/dist/lucide.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="brand">
+        <svg class="logo" viewBox="0 0 64 64" aria-hidden><g fill="none" stroke="currentColor" stroke-width="2"><path d="M32 6 C20 6 10 16 10 28 c0 12 9 22 22 30 13-8 22-18 22-30C54 16 44 6 32 6z"/><path d="M20 34c4 6 12 10 12 10s8-4 12-10"/></g></svg>
+        <span>Swad Bakers</span>
+      </a>
+
+      <nav class="nav">
+        <button id="btn-location" class="nav-icon" title="Select city"><i data-feather="map-pin"></i><span id="city-name">Your City</span></button>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="orders.html" class="nav-link">Orders</a>
+        <a href="orders.html" class="nav-link">product</a>
+        <button id="btn-login" class="nav-link">Login</button>
+        <button id="btn-cart" class="nav-icon" aria-label="Cart"><i data-feather="shopping-cart"></i><span id="cart-count" class="badge">0</span></button>
+        <button id="theme-toggle" class="nav-icon" title="Toggle theme"><i data-feather="moon"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <video class="hero-video" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop" aria-hidden>
+        <source src="donute.mp4"type="video/mp4">
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="hero-content container">
+        <h1>Freshly Baked. Delivered to Your City.</h1>
+        <p>Delicious bakery items, cakes, breads & beverages — fast delivery within your city.</p>
+        <div class="hero-ctas">
+          <button id="order-now" class="btn primary">Order Now</button>
+          <button id="explore-menu" class="btn outline">Explore Menu</button>
+          <select id="city-select" class="city-select" aria-label="Select your city"></select>
+        </div>
+      </div>
+    </section>
+
+    <section class="container categories" id="categories-section">
+      <h2>Categories</h2>
+      <div class="categories-grid" id="categories-grid"></div>
+    </section>
+
+    <section class="container products" id="products-section">
+      <div class="products-header">
+        <h2>Menu</h2>
+        <div class="search-filter">
+          <input id="search" placeholder="Search products" />
+          <select id="filter-category"><option value="">All</option></select>
+          <select id="sort"><option value="">Sort</option><option value="price_asc">Price low → high</option><option value="price_desc">Price high → low</option><option value="rating_desc">Rating</option><option value="new">New arrivals</option></select>
+        </div>
+      </div>
+      <div id="products-grid" class="products-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="container about">
+      <h2>About Swad Bakers</h2>
+      <p>Swad Bakers brings fresh baked goods to your doorstep. City-focused deliveries with transparent delivery charges and estimated times.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Swad Bakers — Local bakery & delivery</p>
+    </div>
+  </footer>
+
+  <template id="product-card">
+    <article class="product-card">
+      <div class="media">
+        <img alt="">
+        <div class="badges"></div>
+        <button class="video-play" hidden>▶</button>
+      </div>
+      <div class="body">
+        <h3 class="title"></h3>
+        <p class="meta"></p>
+        <div class="bottom">
+          <div class="price">₹ <span class="price-val"></span> <small class="discount"></small></div>
+          <div class="actions">
+            <button class="btn small wishlist" title="Add to wishlist"><i data-feather="heart"></i></button>
+            <button class="btn small add-cart">Add</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', ()=>{ if(window.lucide) lucide.replace(); })</script>
+</body>
+</html>
